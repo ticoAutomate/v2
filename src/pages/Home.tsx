@@ -3,7 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../contexts/AuthContext';
 import { 
   ArrowRight, DollarSign, Globe, Clock, Briefcase, 
-  BookOpen, Award, Building, Landmark, Code, Cog 
+  BookOpen, Award, Building, Landmark, Code, Cog, MousePointerClick 
 } from 'lucide-react';
 
 const content = {
@@ -15,7 +15,7 @@ const content = {
     certificationYear: ""
   },
   experience: {
-    title: "Experiencia Profesional",
+    title: "Mi Experiencia",
     items: [
       {
         icon: Building,
@@ -172,7 +172,7 @@ export function Home() {
                 className="px-8 py-4 bg-green-500 text-white rounded-lg text-lg font-semibold hover:bg-green-400 transition-colors flex items-center justify-center group"
               >
                 {user ? 'Ir al Dashboard' : content.cta.primary}
-                <ArrowRight className="ml-2 w-5 h-5 group-hover:translate-x-1 transition-transform" />
+                <MousePointerClick className="ml-2 w-5 h-5 group-hover:translate-y-1 transition-transform" />
               </button>
               <a
                 href="https://www.youtube.com/watch?v=3R67RGjZoOM&ab_channel=UiPath"
