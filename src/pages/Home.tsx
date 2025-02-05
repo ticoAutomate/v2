@@ -175,12 +175,12 @@ export function Home() {
                 <ArrowRight className="ml-2 w-5 h-5 group-hover:translate-x-1 transition-transform" />
               </button>
               <a
-                href="https://chat.whatsapp.com/G4OTmXMLabFFlUVR5wo0Mx"
+                href="https://www.youtube.com/watch?v=3R67RGjZoOM&ab_channel=UiPath"
                 target="_blank"
                 rel="noopener noreferrer"
                 className="px-8 py-4 bg-white/10 backdrop-blur-lg text-white rounded-lg text-lg font-semibold hover:bg-white/20 transition-colors"
               >
-                Unirse al Grupo
+                Que es un Robot de RPA?
               </a>
             </div>
           </div>
