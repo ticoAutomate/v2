@@ -15,6 +15,7 @@ import { Module2 } from './pages/modules/course1/Module2';
 import { Module3 } from './pages/modules/course1/Module3';
 import { Module4 } from './pages/modules/course1/Module4';
 import { Login } from './pages/Login';
+import { AuthCallback } from './pages/AuthCallback';
 
 function App() {
   return (
@@ -28,6 +29,7 @@ function App() {
                 {/* Public Routes */}
                 <Route path="/" element={<Home />} />
                 <Route path="/login" element={<Login />} />
+                <Route path="/auth/callback" element={<AuthCallback />} />
                 
                 {/* Protected Routes */}
                 <Route path="/dashboard" element={
