@@ -1,0 +1,33 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <title>Netlify form definitions</title>
+  </head>
+  <body>
+    <!-- Netlify scans these static HTML form definitions at deploy time. -->
+    <form name="consultation" method="POST" action="/__forms.html" data-netlify="true" netlify-honeypot="bot-field" hidden>
+      <input type="hidden" name="form-name" value="consultation" />
+      <input name="bot-field" />
+      <input type="text" name="name" />
+      <input type="email" name="email" />
+      <input type="text" name="service" />
+      <textarea name="message"></textarea>
+    </form>
+
+    <form name="mentoring-inquiry" method="POST" action="/__forms.html" data-netlify="true" netlify-honeypot="bot-field" hidden>
+      <input type="hidden" name="form-name" value="mentoring-inquiry" />
+      <input name="bot-field" />
+      <input type="text" name="name" />
+      <input type="email" name="email" />
+      <input type="text" name="interest" />
+      <input type="text" name="level" />
+      <textarea name="goal"></textarea>
+      <input type="text" name="language" />
+      <input type="text" name="utm_source" />
+      <input type="text" name="utm_medium" />
+      <input type="text" name="utm_campaign" />
+      <input type="text" name="landing_page" />
+    </form>
+  </body>
+</html>

@@ -1,1 +1,8 @@
+# Retired course portal routes: there is no public login or course dashboard.
+/login /learn 301
+/dashboard /learn 301
+/auth/* /learn 301
+/course/* /learn 301
+
+# SPA support for direct navigation to /learn and anchor sections.
 /* /index.html 200

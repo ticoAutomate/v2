@@ -1,3 +1,36 @@
+@import url('https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Manrope:wght@400;500;600;700;800&display=swap');
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+:root { font-family: 'DM Sans', system-ui, -apple-system, sans-serif; font-synthesis: none; }
+html { scroll-behavior: smooth; }
+body { margin: 0; background: #060e1d; }
+h1, h2, h3, h4 { font-family: 'Manrope', 'DM Sans', system-ui, sans-serif; }
+::selection { background: #59d7ec; color: #041421; }
+section[id] { scroll-margin-top: 96px; }
+.tico-background {
+  background-image: radial-gradient(ellipse 45% 35% at 73% 22%, rgba(0,130,213,0.12), transparent 85%), radial-gradient(ellipse 42% 35% at 12% 68%, rgba(5,198,184,0.07), transparent 85%);
+  pointer-events: none;
+}
+.tico-grid {
+  background-image: linear-gradient(rgba(115,198,234,0.052) 1px, transparent 1px),linear-gradient(90deg, rgba(115,198,234,0.052) 1px, transparent 1px);
+  background-size: 44px 44px;
+  mask-image: linear-gradient(to bottom, transparent 0%, black 20%, black 70%, transparent 100%);
+  pointer-events: none;
+}
+.tico-glass {
+  background: linear-gradient(145deg, rgba(18,38,62,0.94), rgba(9,23,42,0.95));
+  border: 1px solid rgba(125,184,212,0.15);
+  box-shadow: 0 32px 100px rgba(0,0,0,0.22), inset 0 1px 0 rgba(255,255,255,0.04);
+}
+.tico-accent-text { background: linear-gradient(100deg, #72e1e8 0%, #65b9fd 65%, #8ea9ff 100%); background-clip: text; -webkit-background-clip: text; color: transparent; }
+.tico-flag {
+  display: inline-block; width: 18px; height: 12px; flex: 0 0 18px; border-radius: 2px;
+  background: linear-gradient(to bottom, #002b7f 0% 16.67%, #fff 16.67% 33.33%, #ce1126 33.33% 66.67%, #fff 66.67% 83.33%, #002b7f 83.33% 100%);
+  border: 1px solid rgba(255,255,255,0.16); opacity: 0.75;
+}
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
+  *, *::before, *::after { animation-duration: 0.01ms !important; transition-duration: 0.01ms !important; }
+}
