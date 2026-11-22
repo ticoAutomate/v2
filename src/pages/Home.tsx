@@ -1,322 +1,376 @@
-import React from 'react';
-import { useNavigate } from 'react-router-dom';
-import { useAuth } from '../contexts/AuthContext';
-import { 
-  ArrowRight, DollarSign, Globe, Clock, Briefcase, 
-  BookOpen, Award, Building, Landmark, Code, Cog, MousePointerClick 
+import React, { useState } from 'react';
+import { Link } from 'react-router-dom';
+import {
+  ArrowRight, ArrowUpRight, Bot, BrainCircuit, Check, CheckCircle2,
+  ChevronRight, CircuitBoard, Code2, Database, Globe2, GraduationCap,
+  Layers3, Loader2, Mail, MonitorSmartphone, Sparkles, Workflow,
 } from 'lucide-react';
+import { useLanguage } from '../contexts/LanguageContext';
 
-const content = {
-  hero: {
-    title: "Inicia tu Carrera en RPA con TicoAutomate",
-    subtitle: "Domina la Automatización Robótica de Procesos",
-    description: "Únete a la principal plataforma de capacitación RPA en Costa Rica y accede a oportunidades con salarios desde $30,000 hasta $85,000 anuales",
-    certification: "Desarrollador Profesional Certificado por UiPath",
-    certificationYear: ""
+const text = {
+  en: {
+    eyebrow: 'INDEPENDENT TECHNOLOGY CONSULTING',
+    heroLineOne: 'Less manual work.',
+    heroLineTwo: 'More room to grow.',
+    intro: 'We create modern websites, automate everyday workflows, and bring AI into the tools your business already uses.',
+    primary: 'Explore our services',
+    secondary: "Let's talk",
+    heroNote: 'Thoughtful solutions. Built for real businesses.',
+    example: 'EXAMPLE WORKFLOW',
+    exampleTag: 'A smarter way to work',
+    workflow1: 'New request received',
+    workflow1sub: 'Forms, email, or business apps',
+    workflow2: 'Intelligent processing',
+    workflow2sub: 'Automation + AI-assisted steps',
+    workflow3: 'Task completed',
+    workflow3sub: 'Systems updated and team notified',
+    sample: 'Illustrative workflow — not live data',
+    capabilities: 'WORKING ACROSS YOUR TECH STACK',
+    servicesEyebrow: 'WHAT WE DO',
+    servicesTitle: 'The right technology. For the work that matters.',
+    servicesIntro: 'From your first website to complex back-office workflows, we help turn manual processes and disconnected systems into smoother experiences.',
+    services: [
+      { title: 'Process automation & RPA', body: 'Reduce repetitive tasks, connect workflows, and free your team to focus on work that needs people.', tag: 'UiPath · Power Automate' },
+      { title: 'AI implementation', body: 'Make AI useful inside your business with intelligent workflows, document processing, and practical assistants.', tag: 'AI · Intelligent documents' },
+      { title: 'Websites & digital products', body: 'Fast, responsive websites and custom applications designed to make a clear first impression and solve real needs.', tag: 'Web apps · Business websites' },
+      { title: 'Integrations & cloud solutions', body: 'Bring your apps, data, and teams together with secure integrations and reliable cloud-based solutions.', tag: 'APIs · Microsoft Azure' },
+    ],
+    approachEyebrow: 'OUR APPROACH',
+    approachTitle: 'Practical thinking. Meaningful results.',
+    approachDescription: 'No unnecessary complexity. We start by understanding the problem, then build a solution that fits how your business works.',
+    steps: [
+      { num: '01', title: 'Understand', body: 'We learn about your goals, current workflow, and what is slowing things down.' },
+      { num: '02', title: 'Build', body: 'We design and implement a focused, maintainable solution.' },
+      { num: '03', title: 'Improve', body: 'We test, refine, and help you get lasting value from what we build.' },
+    ],
+    experienceNumber: '7+',
+    experienceLabel: 'years of hands-on automation experience',
+    experienceTitle: 'Built on real-world experience, not just ideas.',
+    experienceText: 'TicoAutomate brings an engineering-first mindset to business problems, from operations and finance to digital experiences and modern AI workflows.',
+    learnTag: 'TICOAUTOMATE / LEARN',
+    learnTitle: 'Want to build these skills yourself?',
+    learnBody: 'Private, practical 1-on-1 mentoring in automation and RPA — guided exercises, feedback, and a learning plan built around you.',
+    learnButton: 'Explore private mentoring',
+    contactEyebrow: 'START A CONVERSATION',
+    contactTitle: 'Have a project in mind?',
+    contactIntro: "Tell us what you're trying to improve. Whether it's a small website or a complex automation challenge, we'd love to hear about it.",
+    contactNote: 'Based in Costa Rica. Working with clients worldwide.',
+    formName: 'Your name',
+    formEmail: 'Work email',
+    formService: 'What do you need help with?',
+    formMessage: 'Tell us a little about your project',
+    placeholderName: 'Your name',
+    placeholderEmail: 'you@company.com',
+    placeholderMessage: 'What are you looking to build or improve?',
+    placeholderService: 'Select a service',
+    formServices: ['Automation & RPA', 'AI implementation', 'Website / web app', 'Integrations & cloud', 'Private mentoring', 'Other / not sure yet'],
+    formSubmit: 'Send inquiry',
+    formSending: 'Sending...',
+    formSuccess: 'Thanks! Your message has been submitted.',
+    formError: 'We could not send your message. Please try again.',
+    formPrivacy: 'Your information is used only to respond to your inquiry.',
+    footerDesc: 'Automation, AI, and digital solutions for businesses that want to move forward.',
+    footerNav: 'Explore',
+    footerServices: 'Services',
+    footerApproach: 'Approach',
+    footerContact: 'Contact',
+    footerBuilt: 'Built in Costa Rica',
+    footerRights: 'All rights reserved.',
   },
-  experience: {
-    title: "Mi Experiencia",
-    items: [
-      {
-        icon: Building,
-        title: "Experto en Automatización",
-        description: "Más de 7 años de experiencia práctica en RPA"
-      },
-      {
-        icon: Landmark,
-        title: "Sector Financiero",
-        description: "Proyectos para instituciones financieras multinacionales"
-      },
-      {
-        icon: Code,
-        title: "Líder en Tecnología",
-        description: "Experiencia con corporaciones tecnológicas globales"
-      },
-      {
-        icon: Cog,
-        title: "Optimización Bancaria",
-        description: "Especializado en automatización de procesos bancarios"
-      }
-    ]
+  es: {
+    eyebrow: 'CONSULTORÍA TECNOLÓGICA INDEPENDIENTE',
+    heroLineOne: 'Menos trabajo manual.',
+    heroLineTwo: 'Más espacio para crecer.',
+    intro: 'Creamos sitios web modernos, automatizamos procesos e integramos IA con las herramientas que tu negocio ya utiliza.',
+    primary: 'Explorar servicios',
+    secondary: 'Hablemos',
+    heroNote: 'Soluciones bien pensadas. Para negocios reales.',
+    example: 'EJEMPLO DE AUTOMATIZACIÓN',
+    exampleTag: 'Una forma más inteligente de trabajar',
+    workflow1: 'Nueva solicitud recibida',
+    workflow1sub: 'Formularios, correo o aplicaciones',
+    workflow2: 'Procesamiento inteligente',
+    workflow2sub: 'Automatización + asistencia de IA',
+    workflow3: 'Tarea completada',
+    workflow3sub: 'Sistemas actualizados y equipo notificado',
+    sample: 'Ejemplo ilustrativo — no son datos en vivo',
+    capabilities: 'TRABAJAMOS CON TUS HERRAMIENTAS',
+    servicesEyebrow: 'QUÉ HACEMOS',
+    servicesTitle: 'Tecnología útil para lo que realmente importa.',
+    servicesIntro: 'Desde tu primera página web hasta procesos complejos, transformamos tareas manuales y sistemas desconectados en experiencias más simples.',
+    services: [
+      { title: 'Automatización de procesos y RPA', body: 'Reducimos tareas repetitivas, conectamos procesos y liberamos tiempo para que tu equipo se enfoque en lo importante.', tag: 'UiPath · Power Automate' },
+      { title: 'Implementación de IA', body: 'Integramos IA de forma práctica: flujos inteligentes, procesamiento de documentos y asistentes para tu operación.', tag: 'IA · Documentos inteligentes' },
+      { title: 'Páginas web y productos digitales', body: 'Sitios web rápidos y adaptables, junto con aplicaciones personalizadas para resolver necesidades reales.', tag: 'Aplicaciones · Sitios web' },
+      { title: 'Integraciones y soluciones en la nube', body: 'Conectamos aplicaciones, datos y equipos mediante integraciones seguras y soluciones confiables en la nube.', tag: 'APIs · Microsoft Azure' },
+    ],
+    approachEyebrow: 'CÓMO TRABAJAMOS',
+    approachTitle: 'Enfoque práctico. Resultados que importan.',
+    approachDescription: 'Sin complicaciones innecesarias. Primero entendemos el problema y después construimos una solución adaptada a tu negocio.',
+    steps: [
+      { num: '01', title: 'Entendemos', body: 'Conocemos tus objetivos, procesos actuales y dónde se está perdiendo tiempo.' },
+      { num: '02', title: 'Construimos', body: 'Diseñamos e implementamos una solución enfocada y fácil de mantener.' },
+      { num: '03', title: 'Mejoramos', body: 'Probamos, ajustamos y te ayudamos a obtener valor a largo plazo.' },
+    ],
+    experienceNumber: '7+',
+    experienceLabel: 'años de experiencia práctica en automatización',
+    experienceTitle: 'Experiencia real, no solo buenas ideas.',
+    experienceText: 'TicoAutomate aplica un enfoque de ingeniería a los retos del negocio: operaciones, finanzas, experiencias digitales y soluciones modernas con IA.',
+    learnTag: 'TICOAUTOMATE / LEARN',
+    learnTitle: '¿Querés aprender a hacerlo vos?',
+    learnBody: 'Mentorías privadas 1 a 1 en automatización y RPA, con ejercicios prácticos, revisión de tareas y un plan adaptado a tus objetivos.',
+    learnButton: 'Conocer las mentorías privadas',
+    contactEyebrow: 'EMPECEMOS A CONVERSAR',
+    contactTitle: '¿Tenés un proyecto en mente?',
+    contactIntro: 'Contanos qué necesitás mejorar. Desde una página web hasta una automatización compleja, nos encantará conocer tu idea.',
+    contactNote: 'Desde Costa Rica, trabajando con clientes alrededor del mundo.',
+    formName: 'Tu nombre',
+    formEmail: 'Correo electrónico',
+    formService: '¿En qué necesitás ayuda?',
+    formMessage: 'Contanos un poco sobre tu proyecto',
+    placeholderName: 'Tu nombre',
+    placeholderEmail: 'vos@empresa.com',
+    placeholderMessage: '¿Qué querés construir o mejorar?',
+    placeholderService: 'Seleccioná un servicio',
+    formServices: ['Automatización y RPA', 'Implementación de IA', 'Página web / aplicación', 'Integraciones y nube', 'Mentoría privada', 'Otro / todavía no estoy seguro'],
+    formSubmit: 'Enviar consulta',
+    formSending: 'Enviando...',
+    formSuccess: '¡Gracias! Tu mensaje fue enviado.',
+    formError: 'No pudimos enviar tu mensaje. Intentá de nuevo.',
+    formPrivacy: 'Usaremos tus datos únicamente para responder a tu consulta.',
+    footerDesc: 'Automatización, IA y soluciones digitales para negocios que quieren avanzar.',
+    footerNav: 'Explorá',
+    footerServices: 'Servicios',
+    footerApproach: 'Nuestro enfoque',
+    footerContact: 'Contacto',
+    footerBuilt: 'Hecho en Costa Rica',
+    footerRights: 'Todos los derechos reservados.',
   },
-  benefits: {
-    title: "¿Por qué elegir RPA?",
-    items: [
-      {
-        icon: DollarSign,
-        title: "Salarios Competitivos",
-        description: "Gana $30,000 - $85,000 al año"
-      },
-      {
-        icon: Globe,
-        title: "Trabajo Remoto",
-        description: "Accede a oportunidades globales"
-      },
-      {
-        icon: Briefcase,
-        title: "Alta Demanda",
-        description: "Únete a una industria en crecimiento"
-      },
-      {
-        icon: Clock,
-        title: "Horario Flexible",
-        description: "Equilibra trabajo y vida personal"
-      }
-    ]
-  },
-  courses: {
-    title: "Cursos Disponibles",
-    available: {
-      title: "Introducción a RPA y UiPath",
-      description: "Aprende los fundamentos de RPA y comienza con UiPath",
-      level: "Principiante",
-      duration: "4 semanas",
-      modules: 4
-    },
-    comingSoon: {
-      title: "Próximamente",
-      courses: [
-        {
-          icon: Cog,
-          title: "Herramientas Técnicas Avanzadas",
-          description: "Domina técnicas avanzadas de automatización - ¡100% GRATIS!",
-          level: "Avanzado",
-          duration: "6 semanas",
-          status: "En construcción"
-        },
-        {
-          icon: Building,
-          title: "Gestión de Proyectos con Clientes",
-          description: "Aprende a gestionar proyectos RPA efectivamente",
-          level: "Intermedio",
-          duration: "4 semanas",
-          status: "En construcción"
-        },
-        {
-          icon: Briefcase,
-          title: "Desarrollo Profesional",
-          description: "Posiciónate en el mercado laboral",
-          level: "Administrativo",
-          duration: "3 semanas",
-          status: "En construcción"
-        }
-      ]
-    }
-  },
-  cta: {
-    primary: "Comienza Tu Viaje",
-    secondary: "Conoce Más"
-  }
 };
 
-const images = {
-  hero: "https://images.unsplash.com/photo-1593537512471-c66fbc0a42ed?auto=format&fit=crop&q=80",
-  pattern: "https://images.unsplash.com/photo-1624984632063-10fff73da4e4?auto=format&fit=crop&q=80"
-};
+const servicesIcons = [Workflow, BrainCircuit, MonitorSmartphone, Layers3];
 
 export function Home() {
-  const navigate = useNavigate();
-  const { user } = useAuth();
+  const { language } = useLanguage();
+  const c = text[language];
+  const [formStatus, setFormStatus] = useState<'idle' | 'sending' | 'success' | 'error'>('idle');
 
-  const handleGetStarted = () => {
-    if (user) {
-      navigate('/dashboard');
-    } else {
-      navigate('/login');
+  async function handleContact(event: React.FormEvent<HTMLFormElement>) {
+    event.preventDefault();
+    if (formStatus === 'sending') return;
+    const form = event.currentTarget;
+    const values = new FormData(form);
+    const params = new URLSearchParams();
+    values.forEach((value, key) => params.append(key, String(value)));
+    setFormStatus('sending');
+    try {
+      const response = await fetch('/', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+        body: params.toString(),
+      });
+      if (!response.ok) throw new Error('Form submission failed');
+      setFormStatus('success');
+      form.reset();
+    } catch {
+      setFormStatus('error');
     }
-  };
+  }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-green-900 to-blue-800">
-      <div className="relative overflow-hidden">
-        <div 
-          className="absolute inset-0 z-0"
-          style={{
-            backgroundImage: `url(${images.hero})`,
-            backgroundSize: 'cover',
-            backgroundPosition: 'center'
-          }}
-        >
-          <div className="absolute inset-0 bg-gradient-to-r from-green-900/95 to-blue-800/95" />
-        </div>
+    <div className="relative overflow-hidden bg-[#060e1d] text-white">
+      <div aria-hidden="true" className="tico-background absolute inset-0"/>
+      <div aria-hidden="true" className="tico-grid absolute inset-x-0 top-0 h-[850px] opacity-80"/>
 
-        <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-32 pb-20">
-          <div className="text-center max-w-3xl mx-auto">
-            <div className="flex items-center justify-center mb-8">
-              <div className="bg-gradient-to-r from-green-500/20 to-blue-500/20 backdrop-blur-sm rounded-xl px-6 py-4 border border-green-400/20">
-                <div className="flex items-center gap-3">
-                  <div className="p-2 bg-green-500/20 rounded-lg">
-                    <Award className="w-8 h-8 text-green-400" />
-                  </div>
-                  <div className="text-left">
-                    <div className="text-green-300 font-semibold text-lg">{content.hero.certification}</div>
-                    <div className="text-green-400/80 text-sm">{content.hero.certificationYear}</div>
-                  </div>
-                </div>
-              </div>
+      <section className="relative mx-auto max-w-7xl px-5 pb-24 pt-20 sm:px-8 sm:pt-28 lg:px-10 lg:pb-32 lg:pt-36">
+        <div className="grid items-center gap-14 lg:grid-cols-[1.04fr_0.96fr] lg:gap-14">
+          <div className="relative z-10">
+            <div className="mb-8 inline-flex items-center gap-3 rounded-full border border-cyan-300/20 bg-cyan-300/[0.055] px-4 py-2.5 text-[10px] font-bold tracking-[0.16em] text-cyan-200 sm:text-xs">
+              <span className="relative flex h-2 w-2"><span className="absolute h-full w-full rounded-full bg-cyan-300/25"/><span className="relative h-2 w-2 rounded-full bg-cyan-300"/></span>
+              {c.eyebrow}
             </div>
-
-            <h1 className="text-5xl md:text-6xl font-bold text-white mb-6 leading-tight">
-              {content.hero.title}
+            <h1 className="max-w-[700px] text-[42px] font-semibold leading-[1.09] tracking-[-0.065em] sm:text-[66px] lg:text-[66px] xl:text-[74px]">
+              <span className="block text-white">{c.heroLineOne}</span>
+              <span className="tico-accent-text mt-1 block">{c.heroLineTwo}</span>
             </h1>
-            <h2 className="text-2xl md:text-3xl font-semibold text-green-300 mb-6">
-              {content.hero.subtitle}
-            </h2>
-            <p className="text-xl text-blue-100 mb-12 leading-relaxed">
-              {content.hero.description}
-            </p>
-
-            <div className="flex flex-col sm:flex-row justify-center gap-4 mb-16">
-              <button
-                onClick={handleGetStarted}
-                className="px-8 py-4 bg-green-500 text-white rounded-lg text-lg font-semibold hover:bg-green-400 transition-colors flex items-center justify-center group"
-              >
-                {user ? 'Ir al Dashboard' : content.cta.primary}
-                <MousePointerClick className="ml-2 w-5 h-5 group-hover:translate-y-1 transition-transform" />
-              </button>
-              <a
-                href="https://www.youtube.com/watch?v=3R67RGjZoOM&ab_channel=UiPath"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="px-8 py-4 bg-white/10 backdrop-blur-lg text-white rounded-lg text-lg font-semibold hover:bg-white/20 transition-colors"
-              >
-                Que es un Robot de RPA?
+            <p className="mt-7 max-w-xl text-base leading-8 text-slate-300 sm:text-lg">{c.intro}</p>
+            <div className="mt-9 flex flex-wrap items-center gap-3">
+              <a href="#services" className="group inline-flex items-center gap-3 rounded-lg bg-cyan-300 px-6 py-4 text-sm font-bold text-[#071522] shadow-[0_10px_35px_rgba(82,221,235,0.12)] transition-all hover:-translate-y-0.5 hover:bg-cyan-200">
+                {c.primary}<ArrowUpRight className="h-4 w-4 transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5"/>
+              </a>
+              <a href="#contact" className="inline-flex items-center gap-3 rounded-lg border border-white/15 bg-white/[0.035] px-6 py-4 text-sm font-semibold text-slate-200 transition-colors hover:border-white/30 hover:bg-white/[0.065]">
+                {c.secondary}<ArrowRight className="h-4 w-4"/>
               </a>
             </div>
+            <div className="mt-12 flex items-center gap-3 border-l-2 border-cyan-300/50 pl-4 text-xs leading-6 text-slate-400">{c.heroNote}</div>
           </div>
 
-          <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-8 max-w-7xl mx-auto mt-20">
-            {content.benefits.items.map((benefit, index) => (
-              <div 
-                key={index}
-                className="bg-white/10 backdrop-blur-lg rounded-xl p-6 transform hover:scale-105 transition-all duration-300"
-              >
-                <div className="flex flex-col items-center text-center">
-                  <div className="p-3 bg-green-500/20 rounded-full mb-4">
-                    <benefit.icon className="w-8 h-8 text-green-400" />
-                  </div>
-                  <h3 className="text-xl font-semibold text-white mb-2">
-                    {benefit.title}
-                  </h3>
-                  <p className="text-blue-100">
-                    {benefit.description}
-                  </p>
+          <div className="relative mx-auto w-full max-w-[540px] lg:ml-auto">
+            <div aria-hidden="true" className="pointer-events-none absolute -inset-8 rounded-full bg-blue-500/10 blur-3xl"/>
+            <div className="tico-glass relative overflow-hidden rounded-[23px] p-5 sm:p-7">
+              <div className="absolute right-0 top-0 h-60 w-60 rounded-full bg-cyan-400/[0.055] blur-3xl"/>
+              <div className="relative mb-7 flex items-center justify-between gap-3 border-b border-white/10 pb-5">
+                <div className="flex items-center gap-2">
+                  <span className="flex h-9 w-9 items-center justify-center rounded-lg border border-cyan-300/15 bg-cyan-300/10 text-cyan-300"><CircuitBoard size={18}/></span>
+                  <span className="text-xs font-semibold tracking-[0.11em] text-slate-300">{c.example}</span>
+                </div>
+                <span className="rounded-full border border-cyan-300/20 bg-cyan-300/[0.07] px-2.5 py-1 text-[10px] font-medium text-cyan-200">01 — 03</span>
+              </div>
+              <h2 className="relative mb-6 text-xl font-semibold tracking-tight text-white sm:text-2xl">{c.exampleTag}</h2>
+              <div className="relative">
+                <div aria-hidden="true" className="absolute bottom-10 left-[22px] top-10 w-px bg-gradient-to-b from-cyan-300/50 via-blue-400/50 to-emerald-300/40"/>
+                <div className="relative mb-3 flex items-start gap-4 rounded-xl border border-white/10 bg-[#0b1c31] p-4 sm:p-5">
+                  <div className="z-10 flex h-11 w-11 shrink-0 items-center justify-center rounded-xl border border-blue-300/20 bg-blue-400/10 text-blue-200"><Mail size={19}/></div>
+                  <div className="min-w-0 flex-1"><div className="text-sm font-semibold text-white">{c.workflow1}</div><div className="mt-1 text-xs leading-5 text-slate-400">{c.workflow1sub}</div></div>
+                  <span className="mt-1 text-[10px] font-bold text-slate-500">01</span>
+                </div>
+                <div className="relative mb-3 flex items-start gap-4 rounded-xl border border-cyan-300/25 bg-gradient-to-r from-cyan-300/[0.085] to-blue-400/[0.035] p-4 sm:p-5">
+                  <div className="z-10 flex h-11 w-11 shrink-0 items-center justify-center rounded-xl border border-cyan-300/35 bg-cyan-300/15 text-cyan-200"><BrainCircuit size={21}/></div>
+                  <div className="min-w-0 flex-1"><div className="text-sm font-semibold text-white">{c.workflow2}</div><div className="mt-1 text-xs leading-5 text-slate-300">{c.workflow2sub}</div></div>
+                  <Sparkles className="mt-1 h-4 w-4 text-cyan-300"/>
+                </div>
+                <div className="relative flex items-start gap-4 rounded-xl border border-white/10 bg-[#0b1c31] p-4 sm:p-5">
+                  <div className="z-10 flex h-11 w-11 shrink-0 items-center justify-center rounded-xl border border-emerald-300/25 bg-emerald-300/10 text-emerald-300"><Check size={21}/></div>
+                  <div className="min-w-0 flex-1"><div className="text-sm font-semibold text-white">{c.workflow3}</div><div className="mt-1 text-xs leading-5 text-slate-400">{c.workflow3sub}</div></div>
+                  <span className="mt-1 text-[10px] font-bold text-slate-500">03</span>
                 </div>
               </div>
-            ))}
-          </div>
-
-          <div className="mt-20">
-            <h2 className="text-3xl font-bold text-white text-center mb-12">
-              {content.experience.title}
-            </h2>
-            <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-8">
-              {content.experience.items.map((item, index) => (
-                <div 
-                  key={index}
-                  className="bg-white/10 backdrop-blur-lg rounded-xl p-6 border border-white/10 hover:border-green-400/30 transition-all duration-300"
-                >
-                  <div className="flex flex-col items-center text-center">
-                    <div className="p-3 bg-green-500/20 rounded-full mb-4">
-                      <item.icon className="w-8 h-8 text-green-400" />
-                    </div>
-                    <h3 className="text-xl font-semibold text-white mb-2">
-                      {item.title}
-                    </h3>
-                    <p className="text-blue-100">
-                      {item.description}
-                    </p>
-                  </div>
-                </div>
-              ))}
+              <div className="mt-6 flex items-center gap-2 border-t border-white/[0.07] pt-4 text-[11px] text-slate-500"><span className="h-1.5 w-1.5 rounded-full bg-slate-500"/>{c.sample}</div>
             </div>
           </div>
         </div>
-
-        <div className="absolute bottom-0 left-0 right-0 h-32 bg-gradient-to-t from-green-900/50 to-transparent" />
-      </div>
-
-      {/* Courses Section */}
-      <div className="bg-white/5 backdrop-blur-lg py-20">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <h2 className="text-3xl font-bold text-white text-center mb-12">
-            {content.courses.title}
-          </h2>
-
-          {/* Available Course */}
-          <div className="mb-16">
-            <div
-              onClick={handleGetStarted}
-              className="group bg-gradient-to-br from-white/10 to-white/5 backdrop-blur-lg rounded-2xl p-8 shadow-xl hover:shadow-2xl transform hover:scale-[1.02] transition-all duration-300 cursor-pointer border border-white/10 hover:border-green-400/30"
-            >
-              <div className="flex items-start space-x-6">
-                <div className="p-4 bg-gradient-to-br from-green-500/20 to-blue-500/20 rounded-xl border border-white/10">
-                  <BookOpen className="w-12 h-12 text-green-400" />
-                </div>
-                <div className="flex-1">
-                  <h3 className="text-2xl font-bold text-white group-hover:text-green-400 transition-colors mb-4">
-                    {content.courses.available.title}
-                  </h3>
-                  <p className="text-blue-100 mb-6">
-                    {content.courses.available.description}
-                  </p>
-                  <div className="flex items-center space-x-4">
-                    <span className="px-3 py-1 bg-green-500/20 text-green-400 rounded-full text-sm">
-                      {content.courses.available.level}
-                    </span>
-                    <span className="text-blue-100 flex items-center space-x-1">
-                      <Clock className="w-4 h-4" />
-                      <span>{content.courses.available.duration}</span>
-                    </span>
-                  </div>
-                </div>
-              </div>
-            </div>
+        <div className="mt-24 border-t border-white/10 pt-7 lg:mt-28">
+          <p className="mb-5 text-center text-[10px] font-semibold tracking-[0.17em] text-slate-500">{c.capabilities}</p>
+          <div className="flex flex-wrap items-center justify-center gap-x-12 gap-y-5 text-sm font-semibold tracking-tight text-slate-400 sm:text-base">
+            <span>UiPath</span><span>Power Automate</span><span>Microsoft Azure</span><span>React</span><span>AI Integrations</span>
           </div>
+        </div>
+      </section>
 
-          {/* Coming Soon Section */}
+      <section id="services" className="relative border-y border-white/[0.065] bg-white/[0.018] py-24 sm:py-28">
+        <div className="mx-auto max-w-7xl px-5 sm:px-8 lg:px-10">
+          <div className="mb-12 grid gap-5 lg:grid-cols-[1fr_0.7fr] lg:items-end">
+            <div>
+              <div className="mb-5 text-xs font-bold tracking-[0.18em] text-cyan-300">{c.servicesEyebrow}</div>
+              <h2 className="max-w-2xl text-3xl font-semibold leading-[1.2] tracking-[-0.045em] text-white sm:text-5xl">{c.servicesTitle}</h2>
+            </div>
+            <p className="max-w-lg text-sm leading-8 text-slate-400 sm:text-base lg:ml-auto">{c.servicesIntro}</p>
+          </div>
+          <div className="grid gap-4 md:grid-cols-2">
+            {c.services.map((item, index) => {
+              const Icon = servicesIcons[index];
+              return <div key={item.title} className="group relative rounded-2xl border border-white/10 bg-gradient-to-br from-white/[0.055] to-white/[0.015] p-7 transition-all hover:-translate-y-1 hover:border-cyan-300/30 hover:bg-white/[0.065] sm:p-9">
+                <div className="mb-9 flex items-start justify-between">
+                  <div className="flex h-13 w-13 items-center justify-center rounded-xl border border-cyan-300/20 bg-cyan-300/[0.085] p-3.5 text-cyan-300"><Icon size={25} strokeWidth={1.6}/></div>
+                  <ArrowUpRight className="h-5 w-5 text-slate-600 transition-colors group-hover:text-cyan-300"/>
+                </div>
+                <h3 className="mb-3 text-xl font-semibold tracking-tight text-white sm:text-[22px]">{item.title}</h3>
+                <p className="min-h-[80px] max-w-md text-sm leading-7 text-slate-400">{item.body}</p>
+                <div className="mt-7 inline-flex rounded-md border border-white/10 bg-white/[0.035] px-3 py-2 text-[11px] font-medium text-slate-400">{item.tag}</div>
+              </div>;
+            })}
+          </div>
+        </div>
+      </section>
+
+      <section id="approach" className="relative mx-auto max-w-7xl px-5 py-24 sm:px-8 sm:py-32 lg:px-10">
+        <div className="grid gap-14 lg:grid-cols-[0.95fr_1.05fr]">
           <div>
-            <h3 className="text-2xl font-bold text-white mb-8">
-              {content.courses.comingSoon.title}
-            </h3>
-            <div className="grid md:grid-cols-3 gap-8">
-              {content.courses.comingSoon.courses.map((course, index) => (
-                <div
-                  key={index}
-                  className="bg-gradient-to-br from-white/10 to-white/5 backdrop-blur-lg rounded-xl p-6 border border-white/10"
-                >
-                  <div className="flex items-center space-x-4 mb-4">
-                    <div className="p-3 bg-gradient-to-br from-green-500/20 to-blue-500/20 rounded-lg border border-white/10">
-                      <course.icon className="w-8 h-8 text-green-400" />
-                    </div>
-                    <div>
-                      <h4 className="text-lg font-semibold text-white">
-                        {course.title}
-                      </h4>
-                      <span className="text-sm text-yellow-400">
-                        {course.status}
-                      </span>
-                    </div>
-                  </div>
-                  <p className="text-blue-100 mb-4">
-                    {course.description}
-                  </p>
-                  <div className="flex items-center justify-between text-sm text-blue-200">
-                    <span className="flex items-center gap-1">
-                      <Clock className="w-4 h-4" />
-                      {course.duration}
-                    </span>
-                    <span className="flex items-center gap-1">
-                      <Award className="w-4 h-4" />
-                      {course.level}
-                    </span>
-                  </div>
-                </div>
-              ))}
+            <div className="mb-5 text-xs font-bold tracking-[0.18em] text-cyan-300">{c.approachEyebrow}</div>
+            <h2 className="max-w-xl text-3xl font-semibold leading-[1.2] tracking-[-0.045em] sm:text-5xl">{c.approachTitle}</h2>
+            <p className="mt-6 max-w-lg text-base leading-8 text-slate-400">{c.approachDescription}</p>
+            <div className="mt-12 flex items-center gap-5 rounded-xl border border-white/10 bg-white/[0.025] px-6 py-5 sm:max-w-md">
+              <div className="tico-accent-text text-[50px] font-bold leading-none tracking-[-0.08em]">{c.experienceNumber}</div>
+              <p className="max-w-[210px] text-sm leading-6 text-slate-300">{c.experienceLabel}</p>
+            </div>
+          </div>
+          <div className="relative pt-1">
+            {c.steps.map((step, index) => <div key={step.num} className={'grid grid-cols-[54px_1fr] gap-5 py-7 sm:grid-cols-[70px_1fr] ' + (index === 0 ? 'pt-0' : 'border-t border-white/10')}>
+              <span className="font-mono text-lg font-semibold text-cyan-300/80">{step.num}</span>
+              <div><h3 className="mb-2 text-xl font-semibold text-white">{step.title}</h3><p className="max-w-md text-sm leading-7 text-slate-400">{step.body}</p></div>
+            </div>)}
+            <div className="mt-5 border-l-2 border-cyan-300/35 pl-5">
+              <h3 className="mb-2 text-base font-semibold text-slate-200">{c.experienceTitle}</h3>
+              <p className="text-sm leading-7 text-slate-400">{c.experienceText}</p>
             </div>
           </div>
         </div>
-      </div>
+      </section>
+
+      <section className="relative mx-auto max-w-7xl px-5 pb-24 sm:px-8 sm:pb-32 lg:px-10">
+        <div className="relative overflow-hidden rounded-[24px] border border-cyan-300/20 bg-gradient-to-r from-[#122c48] via-[#10283f] to-[#0a1c34] px-7 py-10 sm:px-12 sm:py-14">
+          <div aria-hidden className="pointer-events-none absolute -right-24 -top-24 h-80 w-80 rounded-full bg-cyan-300/10 blur-[70px]"/>
+          <div className="relative grid gap-8 lg:grid-cols-[1fr_auto] lg:items-center">
+            <div>
+              <div className="mb-4 flex items-center gap-2 text-[11px] font-bold tracking-[0.17em] text-cyan-200"><GraduationCap size={17}/>{c.learnTag}</div>
+              <h2 className="text-2xl font-semibold tracking-[-0.035em] text-white sm:text-3xl">{c.learnTitle}</h2>
+              <p className="mt-3 max-w-2xl text-sm leading-7 text-slate-300">{c.learnBody}</p>
+            </div>
+            <Link to="/learn" className="group inline-flex w-fit items-center gap-3 rounded-lg border border-cyan-200/40 bg-cyan-200/10 px-5 py-3.5 text-sm font-semibold text-cyan-100 transition-colors hover:bg-cyan-200/20">{c.learnButton}<ChevronRight className="h-4 w-4 transition-transform group-hover:translate-x-1"/></Link>
+          </div>
+        </div>
+      </section>
+
+      <section id="contact" className="relative border-t border-white/10 bg-[#091628] py-24 sm:py-28">
+        <div className="mx-auto grid max-w-7xl gap-14 px-5 sm:px-8 lg:grid-cols-[0.9fr_1.1fr] lg:gap-20 lg:px-10">
+          <div>
+            <div className="mb-5 text-xs font-bold tracking-[0.18em] text-cyan-300">{c.contactEyebrow}</div>
+            <h2 className="max-w-lg text-4xl font-semibold leading-[1.16] tracking-[-0.05em] text-white sm:text-5xl">{c.contactTitle}</h2>
+            <p className="mt-6 max-w-lg text-base leading-8 text-slate-300">{c.contactIntro}</p>
+            <div className="mt-9 flex items-start gap-3 text-sm leading-6 text-slate-400"><Globe2 size={18} className="mt-0.5 shrink-0 text-cyan-300"/>{c.contactNote}</div>
+          </div>
+          <form name="consultation" method="POST" data-netlify="true" netlify-honeypot="bot-field" onSubmit={handleContact} className="rounded-2xl border border-white/10 bg-white/[0.035] p-6 sm:p-8">
+            <input type="hidden" name="form-name" value="consultation"/>
+            <p className="hidden"><label>Do not fill this in: <input name="bot-field"/></label></p>
+            <div className="grid gap-5 sm:grid-cols-2">
+              <label className="block text-sm font-medium text-slate-200">{c.formName}<input required maxLength={120} name="name" placeholder={c.placeholderName} autoComplete="name" className="mt-2 block w-full rounded-lg border border-white/15 bg-[#081726] px-4 py-3.5 text-sm text-white outline-none transition-colors placeholder:text-slate-600 focus:border-cyan-300/60"/></label>
+              <label className="block text-sm font-medium text-slate-200">{c.formEmail}<input required type="email" maxLength={160} name="email" autoComplete="email" placeholder={c.placeholderEmail} className="mt-2 block w-full rounded-lg border border-white/15 bg-[#081726] px-4 py-3.5 text-sm text-white outline-none transition-colors placeholder:text-slate-600 focus:border-cyan-300/60"/></label>
+            </div>
+            <label className="mt-5 block text-sm font-medium text-slate-200">{c.formService}
+              <select required name="service" defaultValue="" className="mt-2 block w-full rounded-lg border border-white/15 bg-[#081726] px-4 py-3.5 text-sm text-slate-200 outline-none transition-colors focus:border-cyan-300/60">
+                <option value="" disabled>{c.placeholderService}</option>
+                {c.formServices.map((service, index) => <option key={index} value={['automation','ai','web','integrations','mentoring','other'][index]}>{service}</option>)}
+              </select>
+            </label>
+            <label className="mt-5 block text-sm font-medium text-slate-200">{c.formMessage}<textarea required name="message" rows={5} maxLength={4000} placeholder={c.placeholderMessage} className="mt-2 block w-full resize-y rounded-lg border border-white/15 bg-[#081726] px-4 py-3.5 text-sm text-white outline-none transition-colors placeholder:text-slate-600 focus:border-cyan-300/60"/></label>
+            <button disabled={formStatus === 'sending'} type="submit" className="mt-6 inline-flex w-full items-center justify-center gap-2.5 rounded-lg bg-cyan-300 px-6 py-4 text-sm font-bold text-[#071522] transition-colors hover:bg-cyan-200 disabled:cursor-not-allowed disabled:opacity-60">
+              {formStatus === 'sending' ? <Loader2 size={17} className="animate-spin"/> : <ArrowUpRight size={17}/>}
+              {formStatus === 'sending' ? c.formSending : c.formSubmit}
+            </button>
+            <p role="status" aria-live="polite" className={'mt-4 text-center text-xs ' + (formStatus === 'error' ? 'text-red-300' : formStatus === 'success' ? 'text-emerald-300' : 'text-slate-500')}>
+              {formStatus === 'error' ? c.formError : formStatus === 'success' ? c.formSuccess : c.formPrivacy}
+            </p>
+          </form>
+        </div>
+      </section>
+
+      <footer className="relative border-t border-white/10 bg-[#060e1d]">
+        <div className="mx-auto max-w-7xl px-5 py-12 sm:px-8 lg:px-10">
+          <div className="grid gap-9 sm:grid-cols-2">
+            <div>
+              <Link to="/" className="inline-flex items-center gap-2.5 text-white"><CircuitBoard size={22} className="text-cyan-300"/><span className="text-lg font-semibold tracking-[-0.05em]">tico<span className="text-cyan-300">automate.</span></span></Link>
+              <p className="mt-4 max-w-sm text-sm leading-7 text-slate-500">{c.footerDesc}</p>
+            </div>
+            <div className="flex gap-14 sm:justify-end">
+              <div>
+                <div className="mb-4 text-xs font-semibold uppercase tracking-wider text-slate-300">{c.footerNav}</div>
+                <div className="flex flex-col gap-3 text-sm text-slate-500">
+                  <a href="#services" className="hover:text-cyan-300">{c.footerServices}</a>
+                  <a href="#approach" className="hover:text-cyan-300">{c.footerApproach}</a>
+                  <Link to="/learn" className="hover:text-cyan-300">Learn</Link>
+                  <a href="#contact" className="hover:text-cyan-300">{c.footerContact}</a>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div className="mt-12 flex flex-col gap-4 border-t border-white/10 pt-7 text-xs text-slate-500 sm:flex-row sm:items-center sm:justify-between">
+            <span>© {new Date().getFullYear()} TicoAutomate. {c.footerRights}</span>
+            <span className="inline-flex items-center gap-2.5 self-start rounded-full border border-white/[0.075] bg-white/[0.025] px-3 py-2 text-[11px] tracking-wide text-slate-500 sm:self-auto">
+              <span className="tico-flag" role="img" aria-label="Costa Rica flag"/>{c.footerBuilt}
+            </span>
+          </div>
+        </div>
+      </footer>
     </div>
   );
 }
