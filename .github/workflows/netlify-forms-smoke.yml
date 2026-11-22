@@ -55,9 +55,11 @@ jobs:
             --data-urlencode "service=other" \
             --data-urlencode "message=TEST SUBMISSION from temporary GitHub Actions preview smoke test. This is not a real prospect.")
           echo "Consultation HTTP status: $SERVICE_CODE"
+          SERVICE_OK=1
           if [[ ! "$SERVICE_CODE" =~ ^2[0-9][0-9]$ ]]; then
-            head -c 500 /tmp/service-post.txt
-            exit 1
+            head -c 200 /tmp/service-post.txt
+            echo ""
+            SERVICE_OK=0
           fi
           echo "Submitting a harmless test inquiry for mentoring"
           LEARN_CODE=$(curl --max-time 30 -sS -o /tmp/learn-post.txt -w "%{http_code}" \
@@ -75,8 +77,15 @@ jobs:
             --data-urlencode "utm_campaign=smoke-test" \
             --data-urlencode "landing_page=/learn")
           echo "Mentoring HTTP status: $LEARN_CODE"
+          LEARN_OK=1
           if [[ ! "$LEARN_CODE" =~ ^2[0-9][0-9]$ ]]; then
-            head -c 500 /tmp/learn-post.txt
+            head -c 200 /tmp/learn-post.txt
+            echo ""
+            LEARN_OK=0
+          fi
+          echo "Summary: consultation success=$SERVICE_OK, mentoring success=$LEARN_OK"
+          if [[ "$SERVICE_OK" != "1" || "$LEARN_OK" != "1" ]]; then
+            echo "::error::One or both forms did not accept HTTP submissions; enable Netlify Form detection and redeploy."
             exit 1
           fi
           echo "Both HTTP submissions accepted. Confirm receipt under Netlify > Forms; 2xx alone does NOT prove stored submissions or email notifications."
