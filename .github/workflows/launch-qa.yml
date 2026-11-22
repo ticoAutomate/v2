@@ -1,0 +1,79 @@
+name: Temporary visual and functional launch QA
+on:
+  pull_request:
+    types: [synchronize]
+
+jobs:
+  browser-check:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - name: Install browser automation
+        run: |
+          npm ci
+          npm install --no-save playwright@1.56.1
+          npx playwright install --with-deps chromium
+      - name: Check desktop and mobile experience
+        run: |
+          node --input-type=module <<'JS'
+          import { chromium } from 'playwright';
+          const browser = await chromium.launch({ headless: true, args:['--no-sandbox']});
+          const BASE = 'https://deploy-preview-1--ticoautomate.netlify.app';
+          const cases = [
+            {path:'/?lang=es',width:1440,height:900,h1:'Menos'},
+            {path:'/learn?lang=es',width:1440,height:900,h1:'habilidades'},
+            {path:'/?lang=es',width:390,height:844,h1:'Menos'},
+            {path:'/learn?lang=es',width:390,height:844,h1:'habilidades'},
+            {path:'/?lang=en',width:390,height:844,h1:'manual'},
+            {path:'/learn?lang=en',width:390,height:844,h1:'high-value'},
+            {path:'/?lang=es',width:320,height:700,h1:'Menos'},
+            {path:'/learn?lang=es',width:320,height:700,h1:'habilidades'}
+          ];
+          let fails = 0;
+          for (const tc of cases) {
+            const page = await browser.newPage({viewport:{width:tc.width,height:tc.height}, deviceScaleFactor:1});
+            const errors=[];
+            page.on('pageerror',e=>errors.push(e.message));
+            try {
+              const response = await page.goto(BASE+tc.path,{waitUntil:'domcontentloaded',timeout:30000});
+              const h1=page.locator('h1');
+              await h1.waitFor({state:'visible',timeout:15000});
+              const text=(await h1.innerText()).replace(/\s+/g,' ').trim();
+              const metrics=await page.evaluate(()=>({viewport:innerWidth,bodyWidth:document.body.scrollWidth,documentWidth:document.documentElement.scrollWidth,lang:document.documentElement.lang}));
+              const targetForm=tc.path.startsWith('/learn')?'mentoring-inquiry':'consultation';
+              const form=page.locator('form[name="'+targetForm+'"]');
+              const displayedForm=await form.count()===1 && await form.isVisible();
+              const h1OK=text.toLowerCase().includes(tc.h1.toLowerCase());
+              const overflow=Math.max(metrics.bodyWidth,metrics.documentWidth)-metrics.viewport;
+              const problems=[];
+              if(!response?.ok())problems.push('GET '+response?.status());
+              if(!h1OK)problems.push('unexpected H1 '+text);
+              if(!displayedForm)problems.push('form missing or hidden');
+              if(overflow>3)problems.push('horizontal overflow '+overflow);
+              if(metrics.lang!== (tc.path.includes('lang=es')?'es':'en'))problems.push('language '+metrics.lang);
+              if(errors.length)problems.push('JS errors '+errors.join(' / '));
+              if(tc.width<=390) {
+                const menuButton=page.locator('button[aria-expanded]').first();
+                if(!(await menuButton.count())) problems.push('mobile menu missing');
+                else {
+                  await menuButton.click();
+                  const expanded=await menuButton.getAttribute('aria-expanded');
+                  if(expanded!=='true')problems.push('mobile menu failed to open');
+                  if(!(await page.getByRole('link',{name:/learn|mentoría|contact|hablemos|consultar|ask/i}).count())) problems.push('mobile links missing');
+                }
+              }
+              console.log(JSON.stringify({url:tc.path,width:tc.width,status:response?.status(),h1:text.slice(0,95),form:targetForm,formVisible:displayedForm,metrics,issues:problems}));
+              if(problems.length)fails++;
+            }catch(e){console.error('QA ERROR '+tc.path+' '+tc.width+': '+e.message);fails++;}
+            finally{await page.close()}
+          }
+          const check=await browser.newPage();
+          const old=await check.goto(BASE+'/login',{waitUntil:'domcontentloaded'});
+          const retired=check.url().includes('/learn') || (await check.locator('h1').innerText()).includes('habilidades');
+          console.log(JSON.stringify({legacyLoginRedirect:retired,httpStatus:old?.status(),url:check.url()}));
+          if(!retired)fails++;
+          await browser.close();
+          if(fails){console.error('FAILED cases: '+fails);process.exit(1)}
+          console.log('PASS: Desktop/mobile navigation, form presence, language, and overflow checks.');
+          JS
