@@ -1,8 +1,8 @@
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import {
-  ArrowRight, ArrowUpRight, Bot, BrainCircuit, Check, CheckCircle2,
-  ChevronRight, CircuitBoard, Code2, Database, Globe2, GraduationCap,
+  ArrowRight, ArrowUpRight, BrainCircuit, Check,
+  ChevronRight, CircuitBoard, Globe2, GraduationCap,
   Layers3, Loader2, Mail, MonitorSmartphone, Sparkles, Workflow,
 } from 'lucide-react';
 import { useLanguage } from '../contexts/LanguageContext';
@@ -261,7 +261,7 @@ export function Home() {
               const Icon = servicesIcons[index];
               return <div key={item.title} className="group relative rounded-2xl border border-white/10 bg-gradient-to-br from-white/[0.055] to-white/[0.015] p-7 transition-all hover:-translate-y-1 hover:border-cyan-300/30 hover:bg-white/[0.065] sm:p-9">
                 <div className="mb-9 flex items-start justify-between">
-                  <div className="flex h-13 w-13 items-center justify-center rounded-xl border border-cyan-300/20 bg-cyan-300/[0.085] p-3.5 text-cyan-300"><Icon size={25} strokeWidth={1.6}/></div>
+                  <div className="flex h-14 w-14 items-center justify-center rounded-xl border border-cyan-300/20 bg-cyan-300/[0.085] p-3.5 text-cyan-300"><Icon size={25} strokeWidth={1.6}/></div>
                   <ArrowUpRight className="h-5 w-5 text-slate-600 transition-colors group-hover:text-cyan-300"/>
                 </div>
                 <h3 className="mb-3 text-xl font-semibold tracking-tight text-white sm:text-[22px]">{item.title}</h3>
