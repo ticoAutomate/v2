@@ -1,9 +1,9 @@
 import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import {
-  ArrowRight, ArrowUpRight, BadgeCheck, BookOpen, BriefcaseBusiness,
-  Check, ChevronDown, ClipboardCheck, Code2, GraduationCap, Layers3, Loader2,
-  MessageSquareText, ShieldCheck, Target, UserRound, Video,
+  ArrowRight, ArrowUpRight, CheckCircle, BookOpen, Briefcase,
+  Check, ChevronDown, FileText, Code, GraduationCap, Layers, Loader2,
+  MessageCircle, Shield, Target, User, Video,
 } from 'lucide-react';
 import { useLanguage } from '../contexts/LanguageContext';
 
@@ -176,8 +176,8 @@ const copy = {
   },
 };
 
-const audienceIcons = [BookOpen, Code2, BriefcaseBusiness];
-const practiceIcons = [Layers3, Target, ShieldCheck, MessageSquareText];
+const audienceIcons = [BookOpen, Code, Briefcase];
+const practiceIcons = [Layers, Target, Shield, MessageCircle];
 
 function getAttribution() {
   const params = new URLSearchParams(window.location.search);
@@ -261,7 +261,7 @@ export function Learn() {
             <div aria-hidden className="pointer-events-none absolute -inset-10 rounded-full bg-cyan-500/10 blur-3xl"/>
             <div className="tico-glass relative overflow-hidden rounded-[22px] p-5 sm:p-7">
               <div className="mb-5 flex items-center justify-between gap-2 border-b border-white/10 pb-5">
-                <div className="inline-flex items-center gap-2 text-[10px] font-semibold tracking-[0.13em] text-cyan-200"><ClipboardCheck size={16}/>{c.sampleEyebrow}</div>
+                <div className="inline-flex items-center gap-2 text-[10px] font-semibold tracking-[0.13em] text-cyan-200"><FileText size={16}/>{c.sampleEyebrow}</div>
                 <span className="rounded-md border border-white/10 bg-white/5 px-2 py-1 text-[10px] text-slate-400">01 / 03</span>
               </div>
               <h2 className="text-xl font-semibold tracking-tight text-white sm:text-2xl">{c.sampleTitle}</h2>
@@ -278,7 +278,7 @@ export function Learn() {
                 </div>)}
               </div>
               <div className="flex items-center gap-2.5 rounded-lg border border-emerald-300/15 bg-emerald-300/[0.065] px-4 py-3.5 text-xs text-emerald-100">
-                <BadgeCheck size={18} className="shrink-0 text-emerald-300"/>{c.sampleFeedback}
+                <CheckCircle size={18} className="shrink-0 text-emerald-300"/>{c.sampleFeedback}
               </div>
               <p className="mt-4 text-[10px] text-slate-500">{c.sampleFooter}</p>
             </div>
@@ -345,7 +345,7 @@ export function Learn() {
 
       <section className="relative mx-auto max-w-7xl px-5 py-20 sm:px-8 sm:py-28 lg:px-10">
         <div className="grid items-center gap-9 rounded-[22px] border border-cyan-300/20 bg-gradient-to-br from-[#112c47] to-[#091a30] p-7 sm:p-11 lg:grid-cols-[auto_1fr] lg:gap-12">
-          <div className="flex h-24 w-24 items-center justify-center rounded-2xl border border-cyan-300/25 bg-cyan-300/10 text-cyan-300"><UserRound size={43} strokeWidth={1.2}/></div>
+          <div className="flex h-24 w-24 items-center justify-center rounded-2xl border border-cyan-300/25 bg-cyan-300/10 text-cyan-300"><User size={43} strokeWidth={1.2}/></div>
           <div>
             <div className="mb-3 text-xs font-bold tracking-[0.18em] text-cyan-300">{c.mentorEyebrow}</div>
             <h2 className="text-2xl font-semibold tracking-tight sm:text-3xl">{c.mentorTitle}</h2>
