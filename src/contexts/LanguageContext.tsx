@@ -8,6 +8,9 @@ interface LanguageContextType {
 const LanguageContext = createContext<LanguageContextType | undefined>(undefined);
 
 function getInitialLanguage(): Language {
+  // Campaign links can select the landing language without creating duplicate routes.
+  const requested = new URLSearchParams(window.location.search).get('lang');
+  if (requested === 'en' || requested === 'es') return requested;
   try {
     const saved = window.localStorage.getItem('ticoautomate-language');
     if (saved === 'en' || saved === 'es') return saved;
@@ -23,6 +26,12 @@ export function LanguageProvider({ children }: { children: React.ReactNode }) {
   useEffect(() => {
     document.documentElement.lang = language;
     try { window.localStorage.setItem('ticoautomate-language', language); } catch { /* Optional preference */ }
+    // Keep the campaign language URL in sync when visitors toggle languages.
+    const url = new URL(window.location.href);
+    if (url.searchParams.has('lang') && url.searchParams.get('lang') !== language) {
+      url.searchParams.set('lang', language);
+      window.history.replaceState(window.history.state, '', url.pathname + url.search + url.hash);
+    }
   }, [language]);
 
   return <LanguageContext.Provider value={{ language, setLanguage }}>{children}</LanguageContext.Provider>;

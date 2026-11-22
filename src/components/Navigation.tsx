@@ -8,11 +8,18 @@ export function Navigation() {
   const { pathname } = useLocation();
   const [menuOpen, setMenuOpen] = useState(false);
   const es = language === 'es';
-  const links = [
+  const onLearn = pathname === '/learn';
+  const links = onLearn ? [
+    { to: '/#services', label: es ? 'Servicios' : 'Services' },
+    { to: '/learn#method', label: es ? 'Cómo funciona' : 'How it works' },
+    { to: '/learn#faq', label: es ? 'Preguntas frecuentes' : 'FAQ' },
+  ] : [
     { to: '/#services', label: es ? 'Servicios' : 'Services' },
     { to: '/#approach', label: es ? 'Cómo trabajamos' : 'How we work' },
     { to: '/learn', label: 'Learn' },
   ];
+  const ctaTo = onLearn ? '/learn#apply' : '/#contact';
+  const ctaText = onLearn ? (es ? 'Consultar mentoría' : 'Ask about mentoring') : (es ? 'Hablemos' : "Let's talk");
   const closeMenu = () => setMenuOpen(false);
 
   return (
@@ -37,8 +44,8 @@ export function Navigation() {
           <button type="button" onClick={() => setLanguage(es ? 'en' : 'es')} className="inline-flex items-center gap-2 text-xs font-semibold tracking-widest text-slate-300 transition-colors hover:text-white" aria-label={es ? 'Switch to English' : 'Cambiar a español'}>
             <Globe2 className="h-4 w-4 text-cyan-300/80" /> {es ? 'ES' : 'EN'} <span className="text-slate-600">/</span> <span className="text-slate-500">{es ? 'EN' : 'ES'}</span>
           </button>
-          <Link to="/#contact" className="inline-flex items-center gap-2 rounded-lg border border-cyan-300/35 bg-cyan-300/10 px-4 py-2.5 text-[13px] font-semibold text-cyan-100 transition-colors hover:border-cyan-300 hover:bg-cyan-300/20">
-            {es ? 'Hablemos' : "Let's talk"} <ArrowUpRight className="h-4 w-4"/>
+          <Link to={ctaTo} className="inline-flex items-center gap-2 rounded-lg border border-cyan-300/35 bg-cyan-300/10 px-4 py-2.5 text-[13px] font-semibold text-cyan-100 transition-colors hover:border-cyan-300 hover:bg-cyan-300/20">
+            {ctaText} <ArrowUpRight className="h-4 w-4"/>
           </Link>
         </div>
 
@@ -51,7 +58,7 @@ export function Navigation() {
         <div className="border-t border-white/10 bg-[#081324] px-5 py-5 md:hidden">
           <div className="mx-auto flex max-w-7xl flex-col gap-1">
             {links.map((link) => <Link onClick={closeMenu} key={link.to} to={link.to} className="rounded-lg px-3 py-3 text-sm text-slate-200 hover:bg-white/5">{link.label}</Link>)}
-            <Link onClick={closeMenu} to="/#contact" className="mt-2 rounded-lg bg-cyan-300 px-3 py-3 text-center text-sm font-bold text-[#061222]">{es ? 'Hablemos' : "Let's talk"}</Link>
+            <Link onClick={closeMenu} to={ctaTo} className="mt-2 rounded-lg bg-cyan-300 px-3 py-3 text-center text-sm font-bold text-[#061222]">{ctaText}</Link>
           </div>
         </div>
       )}

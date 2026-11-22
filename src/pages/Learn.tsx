@@ -1,9 +1,9 @@
 import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import {
-  ArrowRight, ArrowUpRight, BadgeCheck, BookOpen, BrainCircuit, BriefcaseBusiness,
+  ArrowRight, ArrowUpRight, BadgeCheck, BookOpen, BriefcaseBusiness,
   Check, ChevronDown, ClipboardCheck, Code2, GraduationCap, Layers3, Loader2,
-  MessageSquareText, ShieldCheck, Sparkles, Target, UserRound, Video,
+  MessageSquareText, ShieldCheck, Target, UserRound, Video,
 } from 'lucide-react';
 import { useLanguage } from '../contexts/LanguageContext';
 
